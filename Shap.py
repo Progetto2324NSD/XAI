@@ -31,35 +31,47 @@ print(report)
 
 # Calcola i valori SHAP per il test set con l'oggetto explainer
 explainer = shap.TreeExplainer(model)
-shap_values_test = explainer(X_test)  # Restituisce un oggetto 'Explanation'
+shap_values_test = explainer(X_test)  
 
 # Stampa le forme di shap_values e X_test per la verifica
 print("Forma dei valori SHAP (test set):", shap_values_test.shape)
 print("Shape relativo ad X_test:", X_test.shape)
 
-# Crea il summary plot per visualizzare tutte le feature
-plt.figure()  # Crea una nuova figura per il plot
+# Summary plot per visualizzare tutte le feature
+plt.figure()
 shap.summary_plot(shap_values_test, X_test, max_display=X_test.shape[1])
 plt.savefig('shap_summary_plot.eps', format='eps', dpi=1200)
 
-# Visualizza il grafico di dipendenza per "Age" con interazione su "Glucose" nel test set
-plt.figure()  # Crea una nuova figura per il plot
+# Visualizzazione grafici di dipendenza (Riportate le voci più significative Glucose, Age e BMI)
+plt.figure() 
 shap.dependence_plot('Glucose', shap_values_test.values, X_test, interaction_index='Age', show=False)
 plt.show()
 
-# Mostra il grafico di forza per il primo campione del set di test
-shap.initjs()  # Inizializza JavaScript per il grafico interattivo
+shap.dependence_plot('Age', shap_values_test.values, X_test, interaction_index='Insulin', show=False)
+plt.show()
 
-# Assicurati di utilizzare l'oggetto Explanation per il campione specifico
-shap_values_single = explainer(X_test.iloc[0:1])  # Calcola i valori SHAP per il primo campione
+shap.dependence_plot('BMI', shap_values_test.values, X_test, interaction_index='Age', show=False)
+plt.show()
+
+# Mostra il grafico di forza per il primo campione del set di test
+shap.initjs()
+
+# Grafico di forza per il singolo campione di set Force Plot-->rappresenta come le varie caratteristiche di un campione influenzano la previsione finale del modello.
+shap_values_single = explainer(X_test.iloc[0:1])
 shap.force_plot(explainer.expected_value, shap_values_single.values, X_test.iloc[0:1])
 
 # Visualizza il grafico a barre dell'importanza delle caratteristiche
-plt.figure()  # Crea una nuova figura per il plot
-shap.plots.bar(shap_values_test)  # Usa direttamente l'oggetto 'Explanation'
+plt.figure()
+shap.plots.bar(shap_values_test)
 plt.savefig('shap_bar_plot.eps', format='eps', dpi=1200) 
 
 # Mostra il grafico decisionale per il primo campione
 plt.figure()  # Crea una nuova figura per il plot
 shap.decision_plot(explainer.expected_value, shap_values_single.values, X_test.iloc[0:1])
 plt.savefig('shap_decision_plot.eps', format='eps', dpi=1200)
+
+#Decision Plot per + Campioni
+for i in range(4):  
+    shap.decision_plot(explainer.expected_value, shap_values_test.values[i], X_test.iloc[i:i+1])
+    plt.savefig(f'shap_decision_plot_sample_{i + 1}.eps', format='eps', dpi=1200)  
+    plt.show()

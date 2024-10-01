@@ -17,7 +17,7 @@ y = data['Outcome']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Crea e addestra il modello XGBoost
-model = xgb.XGBClassifier(use_label_encoder=False, eval_metric='logloss')
+model = xgb.XGBClassifier(eval_metric='logloss')  # Rimosso use_label_encoder
 model.fit(X_train, y_train)
 
 # Crea un oggetto LimeTabularExplainer
