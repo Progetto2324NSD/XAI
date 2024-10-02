@@ -44,13 +44,13 @@ plt.savefig('shap_summary_plot.eps', format='eps', dpi=1200)
 
 # Visualizzazione grafici di dipendenza (Riportate le voci più significative Glucose, Age e BMI)
 plt.figure() 
-shap.dependence_plot('Glucose', shap_values_test.values, X_test, interaction_index='Age', show=False)
+shap.dependence_plot('Glucose', shap_values_test.values, X_test, interaction_index='Glucose', show=False)
 plt.show()
 
-shap.dependence_plot('Age', shap_values_test.values, X_test, interaction_index='Insulin', show=False)
+shap.dependence_plot('Age', shap_values_test.values, X_test, interaction_index='Age', show=False)
 plt.show()
 
-shap.dependence_plot('BMI', shap_values_test.values, X_test, interaction_index='Age', show=False)
+shap.dependence_plot('BMI', shap_values_test.values, X_test, interaction_index='BMI', show=False)
 plt.show()
 
 # Mostra il grafico di forza per il primo campione del set di test
