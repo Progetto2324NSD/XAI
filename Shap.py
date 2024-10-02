@@ -25,7 +25,12 @@ y_pred = model.predict(X_test)
 # Crea il classification_report
 report = classification_report(y_test, y_pred)
 
-# Mostra il classification_report a schermo
+# Salva il classification_report in un file di testo
+with open('classification_report.txt', 'w') as f:
+    f.write("Classification Report:\n")
+    f.write(report)
+
+# Mostra il classification_report a schermo (opzionale)
 print("Classification Report:")
 print(report)
 
@@ -56,7 +61,7 @@ plt.show()
 # Mostra il grafico di forza per il primo campione del set di test
 shap.initjs()
 
-# Grafico di forza per il singolo campione di set Force Plot-->rappresenta come le varie caratteristiche di un campione influenzano la previsione finale del modello.
+# Grafico di forza per il singolo campione di set Force Plot
 shap_values_single = explainer(X_test.iloc[0:1])
 shap.force_plot(explainer.expected_value, shap_values_single.values, X_test.iloc[0:1])
 
