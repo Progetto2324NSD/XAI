@@ -1,0 +1,19 @@
+Classification Report con solo Glucose:
+              precision    recall  f1-score   support
+
+           0       0.77      0.68      0.72        99
+           1       0.72      0.80      0.76       101
+
+    accuracy                           0.74       200
+   macro avg       0.74      0.74      0.74       200
+weighted avg       0.74      0.74      0.74       200
+
+Classification Report con Glucose, Age e BMI:
+              precision    recall  f1-score   support
+
+           0       0.80      0.72      0.76        99
+           1       0.75      0.82      0.78       101
+
+    accuracy                           0.77       200
+   macro avg       0.77      0.77      0.77       200
+weighted avg       0.77      0.77      0.77       200
