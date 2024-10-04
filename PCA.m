@@ -38,62 +38,47 @@ plot(1:length(cumulativeVar), cumulativeVar, '-o', 'Color', 'r', 'LineWidth', 2)
 ylabel('Varianza Cumulativa (%)');
 legend('Varianza Spiegata (%)', 'Varianza Cumulativa (%)');
 hold off; 
+
+% Calcola la varianza cumulativa
 cumulativeExplained = cumsum(explained);
 
 % Determina il numero di componenti che spiegano almeno il 95% della varianza
 numComponents95 = find(cumulativeExplained >= 95, 1);
 disp(['Numero di componenti usati per spiegare almeno il 95% della varianza: ', num2str(numComponents95)]);
 
-% Calcola i coefficienti delle componenti principali
-feature_importance = abs(coeff(:, 1:numComponents95));
-importance_scores = sum(feature_importance, 2);
+% Seleziona solo le prime 2 componenti principali
+X_reduced = score(:, 1:2); % Usa solo le prime due colonne di 'score'
 
-% Ordina le feature in base all'importanza
-[~, sorted_indices] = sort(importance_scores, 'descend');
-sorted_features = data.Properties.VariableNames(1:end-1);
-
-% Mostra le feature originali più importanti
-disp('Feature originali ordinate per importanza:');
-disp(sorted_features(sorted_indices));
-
-% Selezione delle feature rilevanti
-median_importance = median(importance_scores);
-relevant_features_indices = sorted_indices(importance_scores(sorted_indices) > median_importance);
-relevant_features = sorted_features(relevant_features_indices);
-
-% Mostra le feature più rilevanti
-disp('Feature più rilevanti da mantenere:');
-disp(relevant_features');
-
-% Costruisci un nuovo dataset con le feature rilevanti
-X_reduced = X(:, relevant_features_indices);
-reduced_data = array2table(X_reduced, 'VariableNames', relevant_features);
-reduced_data.Outcome = y;
+% Aggiungi la colonna target al dataset ridotto
+X_reduced_with_target = array2table(X_reduced, 'VariableNames', {'PC1', 'PC2'});
+X_reduced_with_target.Outcome = y;
 
 % Mostra il dataset ridotto
-disp('Dataset ridotto con le feature più rilevanti:');
-disp(head(reduced_data));
+disp('Dataset ridotto con le prime 2 componenti principali e la colonna target:');
+disp(head(X_reduced_with_target));
 
 % Salva il dataset ridotto in un file CSV
-writetable(reduced_data, 'diabetes_reduced.csv');
-disp('Dataset ridotto salvato in diabetes_reduced.csv.');
+writetable(X_reduced_with_target, 'diabetes_pca_reduced.csv');
+disp('Dataset ridotto salvato in diabetes_pca_reduced.csv.');
 
-%SCATTER PLOT
+% SCATTER PLOT
 % Visualizzazione Scatter Plot 2D - Prime 2 Componenti Principali
 figure;
-scatter(score(:,1), score(:,2), 50, y, 'filled');
+scatter(X_reduced(:,1), X_reduced(:,2), 50, y, 'filled');
 title('Scatter Plot 2D - Prime 2 Componenti Principali');
-xlabel('Prima componente principale');
-ylabel('Seconda componente principale');
+xlabel('Prima Componente Principale (PC1)');
+ylabel('Seconda Componente Principale (PC2)');
 colorbar;
 grid on;
 
 % Visualizzazione Scatter Plot 3D - Prime 3 Componenti Principali
-figure;
-scatter3(score(:,1), score(:,2), score(:,3), 50, y, 'filled');
-title('Scatter Plot 3D - Prime 3 Componenti Principali');
-xlabel('Prima componente principale');
-ylabel('Seconda componente principale');
-zlabel('Terza componente principale');
-colorbar;
-grid on;
+if size(score, 2) >= 3  % Verifica che ci siano almeno 3 componenti
+    figure;
+    scatter3(score(:,1), score(:,2), score(:,3), 50, y, 'filled');
+    title('Scatter Plot 3D - Prime 3 Componenti Principali');
+    xlabel('Prima Componente Principale (PC1)');
+    ylabel('Seconda Componente Principale (PC2)');
+    zlabel('Terza Componente Principale (PC3)');
+    colorbar;
+    grid on;
+end
