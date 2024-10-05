@@ -46,25 +46,44 @@ cumulativeExplained = cumsum(explained);
 numComponents95 = find(cumulativeExplained >= 95, 1);
 disp(['Numero di componenti usati per spiegare almeno il 95% della varianza: ', num2str(numComponents95)]);
 
+%% Salva il dataset ridotto con 2 componenti principali
+
 % Seleziona solo le prime 2 componenti principali
-X_reduced = score(:, 1:2); % Usa solo le prime due colonne di 'score'
+X_reduced_2 = score(:, 1:2); % Usa solo le prime due colonne di 'score'
 
 % Aggiungi la colonna target al dataset ridotto
-X_reduced_with_target = array2table(X_reduced, 'VariableNames', {'PC1', 'PC2'});
-X_reduced_with_target.Outcome = y;
+X_reduced_2_with_target = array2table(X_reduced_2, 'VariableNames', {'PC1', 'PC2'});
+X_reduced_2_with_target.Outcome = y;
 
-% Mostra il dataset ridotto
+% Mostra il dataset ridotto con 2 componenti principali
 disp('Dataset ridotto con le prime 2 componenti principali e la colonna target:');
-disp(head(X_reduced_with_target));
+disp(head(X_reduced_2_with_target));
 
 % Salva il dataset ridotto in un file CSV
-writetable(X_reduced_with_target, 'diabetes_pca_reduced.csv');
-disp('Dataset ridotto salvato in diabetes_pca_reduced.csv.');
+writetable(X_reduced_2_with_target, 'diabetes_pca_2components.csv');
+disp('Dataset ridotto con 2 componenti salvato in diabetes_pca_2components.csv.');
 
-% SCATTER PLOT
+%% Salva il dataset ridotto con 3 componenti principali
+
+% Seleziona le prime 3 componenti principali
+X_reduced_3 = score(:, 1:3); % Usa le prime tre colonne di 'score'
+
+% Aggiungi la colonna target al dataset ridotto
+X_reduced_3_with_target = array2table(X_reduced_3, 'VariableNames', {'PC1', 'PC2', 'PC3'});
+X_reduced_3_with_target.Outcome = y;
+
+% Mostra il dataset ridotto con 3 componenti principali
+disp('Dataset ridotto con le prime 3 componenti principali e la colonna target:');
+disp(head(X_reduced_3_with_target));
+
+% Salva il dataset ridotto in un file CSV
+writetable(X_reduced_3_with_target, 'diabetes_pca_3components.csv');
+disp('Dataset ridotto con 3 componenti salvato in diabetes_pca_3components.csv.');
+
+%% SCATTER PLOT
 % Visualizzazione Scatter Plot 2D - Prime 2 Componenti Principali
 figure;
-scatter(X_reduced(:,1), X_reduced(:,2), 50, y, 'filled');
+scatter(X_reduced_2(:,1), X_reduced_2(:,2), 50, y, 'filled');
 title('Scatter Plot 2D - Prime 2 Componenti Principali');
 xlabel('Prima Componente Principale (PC1)');
 ylabel('Seconda Componente Principale (PC2)');
