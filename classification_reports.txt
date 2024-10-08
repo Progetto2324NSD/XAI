@@ -1,3 +1,4 @@
+SHAP:
 Classification Report con solo Glucose:
               precision    recall  f1-score   support
 
@@ -29,3 +30,26 @@ Classification Report con tutte le feature:
     accuracy                           0.83       200
    macro avg       0.84      0.83      0.83       200
 weighted avg       0.84      0.83      0.83       200
+
+PCA:
+Classification Report per 2 Componenti:
+
+              precision    recall  f1-score   support
+
+           0       0.74      0.75      0.74       151
+           1       0.51      0.50      0.51        80
+
+    accuracy                           0.66       231
+   macro avg       0.63      0.62      0.62       231
+weighted avg       0.66      0.66      0.66       231
+
+Classification Report per 3 Componenti:
+
+              precision    recall  f1-score   support
+
+           0       0.76      0.79      0.77       151
+           1       0.57      0.53      0.55        80
+
+    accuracy                           0.70       231
+   macro avg       0.66      0.66      0.66       231
+weighted avg       0.69      0.70      0.69       231

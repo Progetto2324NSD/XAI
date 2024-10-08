@@ -1,9 +1,0 @@
-Classification Report per il dataset diabetes_pca_2components.csv:
-              precision    recall  f1-score   support
-
-           0       0.72      0.70      0.71        99
-           1       0.71      0.73      0.72       101
-
-    accuracy                           0.71       200
-   macro avg       0.72      0.71      0.71       200
-weighted avg       0.72      0.71      0.71       200

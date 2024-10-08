@@ -1,9 +1,0 @@
-Classification Report con SMOTE e XGBoost:
-              precision    recall  f1-score   support
-
-           0       0.89      0.75      0.81        99
-           1       0.79      0.91      0.84       101
-
-    accuracy                           0.83       200
-   macro avg       0.84      0.83      0.83       200
-weighted avg       0.84      0.83      0.83       200

@@ -1,42 +1,39 @@
-import pandas as pd
+# Importa le librerie necessarie
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
-import xgboost as xgb
-from imblearn.over_sampling import SMOTE
+from xgboost import XGBClassifier
+import pandas as pd
 
-# Funzione per caricare il dataset, applicare SMOTE e addestrare il modello XGBoost
-def generate_classification_report(csv_filename, report_filename):
+# Definisci una funzione per caricare i dati, addestrare il modello e stampare il classification report
+def train_and_report(file_path, components):
     # Carica il dataset
-    data = pd.read_csv(csv_filename)
-    
-    # Separa le componenti principali e il target (Outcome)
-    X = data.drop(columns=['Outcome'])  # Componenti principali ridotte
+    data = pd.read_csv(file_path)
+
+    # Prepara le feature e il target
+    X = data.iloc[:, :-1]
     y = data['Outcome']
-    
-    # Applica SMOTE per bilanciare le classi
-    smote = SMOTE(random_state=42)
-    X_smote, y_smote = smote.fit_resample(X, y)
-    
-    # Suddividi il dataset in training e test set
-    X_train, X_test, y_train, y_test = train_test_split(X_smote, y_smote, test_size=0.2, random_state=42)
-    
-    # Crea e addestra il modello XGBoost
-    model = xgb.XGBClassifier(eval_metric='logloss', random_state=42)
+    # Dividi i dati in set di addestramento e set di test
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+    # Inizializza e allena l'XGBClassifier con learning_rate=0.05
+    model = XGBClassifier(use_label_encoder=False, eval_metric='logloss', 
+                          learning_rate=0.05, n_estimators=200, max_depth=4)
     model.fit(X_train, y_train)
-    
-    # Prevedi i risultati per il test set
+
+    # Predici il set di test
     y_pred = model.predict(X_test)
-    
-    # Crea il classification report
+
+    # Genera il Classification Report
     report = classification_report(y_test, y_pred)
-    
-    # Salva il classification report in un file di testo
-    with open(report_filename, 'w') as f:
-        f.write(f"Classification Report per il dataset {csv_filename}:\n")
-        f.write(report)
+    print(f"\nClassification Report per {components} Componenti:\n")
+    print(report)
 
-# Genera i classification report per i due dataset e salva nei file di testo
-generate_classification_report('diabetes_pca_2components.csv', 'classification_report_pca2.txt')
-generate_classification_report('diabetes_pca_3components.csv', 'classification_report_pca3.txt')
+# Percorsi ai file CSV per 2 e 3 componenti
+file_path_2_components = 'diabetes_pca_2components.csv'  # Sostituisci con il percorso effettivo del file
+file_path_3_components = 'diabetes_pca_3components.csv'  # Sostituisci con il percorso effettivo del file
 
-print("I classification report sono stati salvati.")
+# Testa e stampa il Classification Report per 2 componenti
+train_and_report(file_path_2_components, 2)
+
+# Testa e stampa il Classification Report per 3 componenti
+train_and_report(file_path_3_components, 3)
