@@ -8,17 +8,9 @@ data = readtable('diabetes(2).csv');
 disp('Dati originali:');
 disp(head(data));  % Mostra le prime righe del dataset
 
-% Seleziona solo le colonne di interesse
-columns_of_interest = {'Insulin', 'Glucose', 'BloodPressure', 'Outcome'}; % Aggiungi il nome della colonna target
-data_filtered = data(:, columns_of_interest); % Filtra il dataset
-
-% Mostra il dataset filtrato
-disp('Dataset filtrato:');
-disp(head(data_filtered));
-
 % Separa le features (X) dal target (y)
-X = data_filtered{:, 1:end-1}; % Separa le colonne delle features
-y = data_filtered{:, end};     % Colonna target (esito della malattia)
+X = data{:, 1:end-1}; % Separa le colonne delle features (tutte tranne l'ultima)
+y = data{:, end};     % Colonna target (esito della malattia)
 
 % Mostra dimensioni di X e y
 disp(['Dimensione di X: ', num2str(size(X))]);
@@ -55,23 +47,8 @@ cumulativeExplained = cumsum(explained);
 numComponents95 = find(cumulativeExplained >= 95, 1);
 disp(['Numero di componenti usati per spiegare almeno il 95% della varianza: ', num2str(numComponents95)]);
 
-% Stampa i nomi delle 3 componenti principali
-disp('Nomi delle 3 Componenti Principali:');
-for i = 1:3
-    [~, idx] = sort(abs(coeff(:, i)), 'descend'); % Ordina le caratteristiche in base all'importanza
-    disp(['Componente Principale ', num2str(i), ':']);
-    for j = 1:min(3, length(idx)) % Mostra le prime 3 caratteristiche più importanti
-        fprintf('%s: %.6f\n', columns_of_interest{idx(j)}, coeff(idx(j), i));
-    end
-    disp(' '); % Riga vuota per separare le componenti
-end
-
-%% Salva il dataset ridotto con 2 componenti principali
-
-% Seleziona solo le prime 2 componenti principali
+% Salva il dataset ridotto con 2 componenti principali
 X_reduced_2 = score(:, 1:2); % Usa solo le prime due colonne di 'score'
-
-% Aggiungi la colonna target al dataset ridotto
 X_reduced_2_with_target = array2table(X_reduced_2, 'VariableNames', {'PC1', 'PC2'});
 X_reduced_2_with_target.Outcome = y;
 
@@ -83,12 +60,8 @@ disp(head(X_reduced_2_with_target));
 writetable(X_reduced_2_with_target, 'diabetes_pca_2components.csv');
 disp('Dataset ridotto con 2 componenti salvato in diabetes_pca_2components.csv.');
 
-%% Salva il dataset ridotto con 3 componenti principali
-
-% Seleziona le prime 3 componenti principali
+% Salva il dataset ridotto con 3 componenti principali
 X_reduced_3 = score(:, 1:3); % Usa le prime tre colonne di 'score'
-
-% Aggiungi la colonna target al dataset ridotto
 X_reduced_3_with_target = array2table(X_reduced_3, 'VariableNames', {'PC1', 'PC2', 'PC3'});
 X_reduced_3_with_target.Outcome = y;
 
